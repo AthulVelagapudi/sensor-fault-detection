@@ -1,0 +1,6 @@
+<<<<<<< HEAD
+pymongoa[srv]==4.2.0
+=======
+pymongo[srv]==4.2.0
+>>>>>>> 812b32b9b9212f77a477d1aaf61701ad170a1341
+-e .
