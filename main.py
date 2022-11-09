@@ -15,6 +15,8 @@ from fastapi.responses import Response
 from sensor.ml.model.estimator import ModelResolver,TargetValueMapping
 from sensor.utils.main_utils import load_object
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import UploadFile,File 
+import pandas as pd
 import os
 
 
@@ -37,12 +39,12 @@ async def train_route():
     except Exception as e:
         return Response(f"Error Occurred! {e}")
 @app.get("/predict")
+#file: UploadFile = File(...)
 async def predict_route():
     try:
         #get data from user csv file
         #conver csv file to dataframe
-
-        df=None
+        #df = pd.read_csv(file.name)
         model_resolver = ModelResolver(model_dir=SAVED_MODEL_DIR)
         if not model_resolver.is_model_exists():
             return Response("Model is not available")
