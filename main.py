@@ -1,23 +1,29 @@
-import os
-import sys
-
-import pandas as pd
-from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
-from starlette.responses import RedirectResponse
-from uvicorn import run as app_run
-
 from sensor.configuration.mongo_db_connection import MongoDBClient
-from sensor.constant.application import APP_HOST, APP_PORT
-from sensor.constant.training_pipeline import SAVED_MODEL_DIR
 from sensor.exception import SensorException
+import os,sys
 from sensor.logger import logging
-from sensor.ml.model.estimator import ModelResolver, TargetValueMapping
 from sensor.pipeline import training_pipeline
 from sensor.pipeline.training_pipeline import TrainPipeline
-from sensor.utils.main_utils import load_object, read_yaml_file
+import os
+from sensor.utils.main_utils import read_yaml_file
+from sensor.constant.training_pipeline import SAVED_MODEL_DIR
+from fastapi import FastAPI
+from sensor.constant.application import APP_HOST, APP_PORT
+from starlette.responses import RedirectResponse
+from uvicorn import run as app_run
+from fastapi.responses import Response
+from sensor.ml.model.estimator import ModelResolver,TargetValueMapping
+from sensor.utils.main_utils import load_object
+from fastapi.middleware.cors import CORSMiddleware
+import os
 
+env_file_path=os.path.join(os.getcwd(),"env.yaml")
+
+def set_env_variable(env_file_path):
+
+    if os.getenv('MONGO_DB_URL',None) is None:
+        env_config = read_yaml_file(env_file_path)
+        os.environ['MONGO_DB_URL']=env_config['MONGO_DB_URL']
 app = FastAPI()
 origins = ["*"]
 
@@ -43,6 +49,7 @@ async def predict_route():
         #get data from user csv file
         #conver csv file to dataframe
         #df = pd.read_csv(file.name)
+        df = None
         model_resolver = ModelResolver(model_dir=SAVED_MODEL_DIR)
         if not model_resolver.is_model_exists():
             return Response("Model is not available")
@@ -60,6 +67,7 @@ async def predict_route():
 
 def main():
     try:
+        set_env_variable(env_file_path)
         training_pipeline = TrainPipeline()
         training_pipeline.run_pipeline()
     except Exception as e:
