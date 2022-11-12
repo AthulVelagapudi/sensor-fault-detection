@@ -24,7 +24,6 @@ The problem is to reduce the cost due to unnecessary repairs. So it is required 
 2. AWS EC2
 3. AWS ECR
 4. Git Actions
-5. Terraform
 
 ## How to run?
 Before we run the project, make sure that you are having MongoDB in your local system, with Compass since we are using MongoDB for data storage. You also need AWS account to access the service like S3, ECR and EC2 instances.
@@ -103,9 +102,4 @@ docker build --build-arg AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID> --build-arg AWS_S
 3. Run the Docker image
 ```
 docker run -d -p 8080:8080 <IMAGE_NAME>
-```
-
-MONGO DB URL: 
-```
-mongodb+srv://temp-user:U8I5A6oh0jJVnVoU@ineuron-ai-projects.7eh1w4s.mongodb.net/admin?authSource=admin&replicaSet=atlas-okvkrd-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass&retryWrites=true&ssl=true
 ```
